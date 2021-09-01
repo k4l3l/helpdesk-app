@@ -1,0 +1,44 @@
+services:
+  client:
+    image: client
+    stdin_open: true
+    ports: 
+      - "3000:3000"
+    networks:
+      - helpdesk-app
+  api-server:
+    image: api-server
+    ports:
+      - "4000:4000"
+    networks:
+      - helpdesk-app
+    environment: 
+      DATABASE_URL: "postgresql://postgres:s3cr3t@postgres:5432/postgres?schema=public"
+    depends_on:
+      - postgres
+      - redis
+  postgres:
+    image: "postgres:13-alpine"
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: s3cr3t
+    ports:
+      - "5432:5432"
+    networks:
+      - helpdesk-app
+    volumes:
+      - postgres-data:/data/db
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"
+    networks:
+      - helpdesk-app
+    volumes:
+      - postgres-data:/data/redis
+networks:
+  helpdesk-app:
+    driver: bridge
+volumes:
+  postgres-data:
+    driver: local

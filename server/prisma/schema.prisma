@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      =  env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id          Int     @id @default(autoincrement())
+  name        String
+  username    String    @unique
+  password    String
+  roles       Role[]
+  posts       Post[]
+  messages    Message[]
+  createdTickets     Ticket[]  @relation("created-tickets")
+  handledTickets     Ticket[]   @relation("handled-tickets")
+}
+
+model Role {
+  id      Int     @id @default(autoincrement())
+  users   User[]
+  name    String @unique
+}
+
+model Post {
+  id        Int     @id @default(autoincrement())
+  author    User    @relation(fields: [authorId], references: [id])
+  authorId  Int
+  title     String  @unique
+  content   String
+  createdAt DateTime @default(now())
+}
+
+model Message {
+  id          Int     @id @default(autoincrement())
+  message     String
+  author      User  @relation(fields: [userId], references: [id])
+  userId      Int
+  sentAt      DateTime @default(now())
+  ticket      Ticket  @relation(fields: [ticketId], references: [id])
+  ticketId    Int
+}
+
+model Ticket {
+  id          Int     @id @default(autoincrement())
+  title       String
+  description String?
+  messages    Message[]
+  creator     User  @relation("created-tickets", fields: [creatorId], references: [id])
+  creatorId   Int  
+  handler     User? @relation("handled-tickets", fields: [handlerId], references: [id])
+  handlerId   Int?
+  isOpen      Boolean
+}

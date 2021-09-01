@@ -1,0 +1,30 @@
+extend type Query {
+    ticketStatus(id: ID): TicketStatus
+    tickets: [Ticket]!
+}
+
+extend type Mutation {
+    openTicket(title: String!, description: String!): Ticket!
+    closeTicket(id: ID!): String!
+    leaveTicket(id: ID!): Ticket!
+    acceptTicket(id: ID!): Ticket!
+}
+
+extend type Subscription {
+    ticketStatus(id: ID!): TicketStatus
+    newTicket: TicketStatus
+}
+
+type Ticket {
+    id: ID!
+    title: String!
+    description: String
+    creator: User!
+    handler: User
+    isOpen: Boolean
+    messages(take: Int): [Message]!
+}
+
+type TicketStatus {
+    ticket: Ticket
+}

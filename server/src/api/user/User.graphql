@@ -1,0 +1,36 @@
+type Query {
+    users: [User!]!
+    info: String!
+    authInfo: AuthInfo 
+}
+
+type Mutation {
+    signup(username: String!, password: String!, name: String!): AuthPayload
+    login(username: String!, password: String!): AuthPayload
+    logout: String!
+}
+
+type User {
+    id: ID!
+    name: String
+    username: String!
+    roles: [Role]!
+    posts: [Post]
+    createdTickets: [Ticket]
+    handledTickets: [Ticket]
+}
+
+type AuthPayload {
+    user: User
+}
+
+type AuthInfo {
+    userId: String
+    name: String
+    isAdmin: Boolean
+}
+
+enum Role {
+    ADMIN
+    USER
+}

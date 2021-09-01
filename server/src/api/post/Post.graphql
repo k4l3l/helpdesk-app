@@ -1,0 +1,21 @@
+extend type Query {
+    posts(take: Int): [Post]! 
+}
+
+extend type Mutation {
+    createPost(title: String!, content: String!): Post!
+    updatePost(id: ID!, title: String!, content: String!): Post!
+    deletePost(id: ID!): Post
+}
+
+type Subscription {
+    newPost: Post
+}
+
+type Post {
+    id: ID!
+    title: String!
+    content: String
+    author: User!
+    createdAt: String
+}

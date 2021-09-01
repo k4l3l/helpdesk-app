@@ -1,0 +1,25 @@
+extend type Query {
+    chat(id: ID!): [Message]!    
+}
+
+extend type Subscription {
+    newMsg(id: ID!): Message
+    chatStatus(id: ID!): ChatStatus
+}
+
+extend type Mutation {
+    sendMsg(id: ID!, message: String!): Message
+    changeChatStatus(id: ID!, isTyping: String): ChatStatus
+}
+
+type Message {
+    id: ID!
+    author: User!
+    sentAt: String
+    ticket: Ticket!
+    message: String
+}
+
+type ChatStatus {
+    isTyping: Boolean
+}
